@@ -14,6 +14,7 @@ import run.halo.app.controller.content.auth.CategoryAuthentication;
 import run.halo.app.controller.content.auth.ContentAuthentication;
 import run.halo.app.controller.content.auth.ContentAuthenticationManager;
 import run.halo.app.controller.content.auth.ContentAuthenticationRequest;
+import run.halo.app.controller.content.auth.JournalAuthentication;
 import run.halo.app.controller.content.auth.PostAuthentication;
 import run.halo.app.exception.AuthenticationException;
 import run.halo.app.model.entity.Category;
@@ -45,13 +46,16 @@ public class ContentAuthenticationManagerTest {
     @MockBean
     private PostCategoryService postCategoryService;
 
+    @MockBean
+    private JournalAuthentication journalAuthentication;
+
     private ContentAuthenticationManager contentAuthenticationManager;
 
     @BeforeEach
     public void setUp() {
         contentAuthenticationManager =
             new ContentAuthenticationManager(categoryService, categoryAuthentication, postService,
-                postAuthentication, postCategoryService);
+                        postAuthentication, postCategoryService, journalAuthentication);
     }
 
     @Test
