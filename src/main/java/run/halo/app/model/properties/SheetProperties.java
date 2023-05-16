@@ -33,7 +33,17 @@ public enum SheetProperties implements PropertyEnum {
     /**
      * Journals page size.
      */
-    JOURNALS_PAGE_SIZE("journals_page_size", Integer.class, "10");
+    JOURNALS_PAGE_SIZE("journals_page_size", Integer.class, "10"),
+
+    /**
+     * Journals passsword.
+     */
+    JOURNALS_PASSWORD("journals_pwd", String.class, "123"),
+
+    /**
+     * Journals passsword flag.
+     */
+    JOURNALS_NEED_PWD("journals_need_pwd", Boolean.class, "true");
 
     private final String value;
 

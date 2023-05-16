@@ -6,7 +6,9 @@ package run.halo.app.model.enums;
  */
 public enum EncryptTypeEnum {
 
-    POST("post"), CATEGORY("category");
+    POST("post"),
+    CATEGORY("category"),
+    JOIRNALS("journals");
 
     private final String name;
 

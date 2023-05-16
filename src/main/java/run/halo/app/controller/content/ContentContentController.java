@@ -261,10 +261,28 @@ public class ContentContentController {
         HttpServletRequest request) throws UnsupportedEncodingException {
         if (EncryptTypeEnum.POST.getName().equals(type)) {
             return authenticatePost(slug, type, password, request);
+        } else if (EncryptTypeEnum.JOIRNALS.getName().equals(type)) {
+            return authenticateJournals(slug, type, password, request);
         } else if (EncryptTypeEnum.CATEGORY.getName().equals(type)) {
             return authenticateCategory(slug, type, password, request);
         } else {
             throw new UnsupportedException("未知的加密类型");
+        }
+    }
+
+    public String authenticateJournals(String slug, String type, String password,
+            HttpServletRequest request) throws UnsupportedEncodingException {
+
+        ContentAuthenticationRequest authRequest = new ContentAuthenticationRequest();
+        authRequest.setPassword(password);
+        authRequest.setPrincipal(EncryptTypeEnum.JOIRNALS.getName());
+        try {
+            providerManager.authenticate(authRequest);
+            return "redirect:" + buildRedirectUrl("/" + optionService.getJournalsPrefix());
+        } catch (AuthenticationException e) {
+            request.setAttribute("errorMsg", e.getMessage());
+            request.setAttribute("type", type);
+            return getPasswordPageUriToForward();
         }
     }
 

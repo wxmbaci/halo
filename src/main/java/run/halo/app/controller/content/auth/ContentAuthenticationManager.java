@@ -31,22 +31,28 @@ public class ContentAuthenticationManager {
     private final PostService postService;
     private final PostAuthentication postAuthentication;
     private final PostCategoryService postCategoryService;
+    private final JournalAuthentication journalAuthentication;
 
     public ContentAuthenticationManager(CategoryService categoryService,
-        CategoryAuthentication categoryAuthentication, PostService postService,
-        PostAuthentication postAuthentication,
-        PostCategoryService postCategoryService) {
+            CategoryAuthentication categoryAuthentication, PostService postService,
+            PostAuthentication postAuthentication,
+            PostCategoryService postCategoryService,
+            JournalAuthentication journalAuthentication) {
         this.categoryService = categoryService;
         this.categoryAuthentication = categoryAuthentication;
         this.postService = postService;
         this.postAuthentication = postAuthentication;
         this.postCategoryService = postCategoryService;
+        this.journalAuthentication = journalAuthentication;
     }
 
     public ContentAuthentication authenticate(ContentAuthenticationRequest authRequest) throws
         AuthenticationException {
         if (EncryptTypeEnum.POST.getName().equals(authRequest.getPrincipal())) {
             return authenticatePost(authRequest);
+        }
+        if (EncryptTypeEnum.JOIRNALS.getName().equals(authRequest.getPrincipal())) {
+            return authenticateJournal(authRequest);
         }
         if (EncryptTypeEnum.CATEGORY.getName().equals(authRequest.getPrincipal())) {
             return authenticateCategory(authRequest);
@@ -73,6 +79,16 @@ public class ContentAuthenticationManager {
         Post post = event.getPost();
         if (post != null) {
             postAuthentication.clearByResourceId(post.getId());
+        }
+    }
+
+    private JournalAuthentication authenticateJournal(ContentAuthenticationRequest authRequest) {
+
+        if (StringUtils.equals(journalAuthentication.getJournalPwd(), authRequest.getPassword())) {
+            journalAuthentication.setAuthenticated(0, true);
+            return journalAuthentication;
+        } else {
+            throw new AuthenticationException("密码不正确");
         }
     }
 
